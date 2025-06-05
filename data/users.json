@@ -1,0 +1,12 @@
+[
+  {
+    "username": "admin",
+    "password_hash": "pbkdf2:sha256:1000000$bnLBsMnLAGMuHpXu$8177dba4f9bd1cc9019ed2fcd419072dc96293ff3690508717d2d93ae349714e",
+    "role": "admin"
+  },
+  {
+    "username": "vendedor",
+    "password_hash": "pbkdf2:sha256:1000000$9OQy5qnuQ84OQjk0$560af155abb51eb80cf1157bac1a8992c678b2d46322fe382dbaa648fc42b666",
+    "role": "vendedor"
+  }
+]

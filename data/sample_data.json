@@ -1,0 +1,92 @@
+[
+  {
+    "numero": "01",
+    "cliente": "Ariane",
+    "vendedor": "Barbara",
+    "material": [
+      "Adesivo"
+    ],
+    "fornecedor": "Cubo",
+    "valor_total": 35.0,
+    "custo": 15.0,
+    "valor_entrada": 17.5,
+    "valor_restante": 17.5,
+    "valor_estimado_lucro": 20.0,
+    "forma_pagamento": "PIX",
+    "data": "2025-06-04",
+    "status": "Finalizada",
+    "status_class": "status-aguardando-aprova\u00e7\u00e3o"
+  },
+  {
+    "numero": "02",
+    "cliente": "Barbara",
+    "vendedor": "Barbara",
+    "material": [
+      "Adesivo"
+    ],
+    "fornecedor": "Cubo",
+    "valor_total": 75.0,
+    "custo": 15.0,
+    "valor_entrada": 37.5,
+    "valor_restante": 37.5,
+    "valor_estimado_lucro": 60.0,
+    "forma_pagamento": "Cr\u00e9dito",
+    "data": "2025-06-04",
+    "status": "Finalizada",
+    "status_class": "status-aguardando-aprova\u00e7\u00e3o"
+  },
+  {
+    "numero": "03",
+    "cliente": "Teste",
+    "vendedor": "Teste",
+    "material": [
+      "Cart\u00f5es de Visita"
+    ],
+    "fornecedor": "Cubo",
+    "valor_total": 12699.0,
+    "custo": 2699.0,
+    "valor_entrada": 6349.5,
+    "valor_restante": 6349.5,
+    "valor_estimado_lucro": 10000.0,
+    "forma_pagamento": "PIX",
+    "data": "2025-06-04",
+    "status": "Finalizada",
+    "status_class": "status-em-produ\u00e7\u00e3o"
+  },
+  {
+    "numero": "04",
+    "cliente": "Teste",
+    "vendedor": "Teste",
+    "material": [
+      "Cart\u00f5es de Visita"
+    ],
+    "fornecedor": "Cubo",
+    "valor_total": 2500.0,
+    "custo": 1000.0,
+    "valor_entrada": 1250.0,
+    "valor_restante": 1250.0,
+    "valor_estimado_lucro": 1500.0,
+    "forma_pagamento": "PIX",
+    "data": "2025-06-04",
+    "status": "Finalizada",
+    "status_class": "status-aguardando-aprova\u00e7\u00e3o"
+  },
+  {
+    "numero": "05",
+    "cliente": "Mayara teste",
+    "vendedor": "Barbara",
+    "material": [
+      "Teste"
+    ],
+    "fornecedor": "Teste",
+    "valor_total": 200.0,
+    "custo": 50.0,
+    "valor_entrada": 100.0,
+    "valor_restante": 100.0,
+    "valor_estimado_lucro": 150.0,
+    "forma_pagamento": "PIX",
+    "data": "2025-06-04",
+    "status": "Finalizada",
+    "status_class": "status-aguardando-aprova\u00e7\u00e3o"
+  }
+]

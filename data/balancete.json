@@ -1,0 +1,70 @@
+{
+  "entries": [
+    {
+      "id": 1,
+      "type": "entrada",
+      "value": 350.0,
+      "reference_id": "16",
+      "date": "2025-06-04T15:09:03.711492",
+      "category": "servico"
+    },
+    {
+      "id": 2,
+      "type": "entrada",
+      "value": 35.0,
+      "reference_id": "17",
+      "date": "2025-06-04T15:41:31.672615",
+      "category": "servico"
+    },
+    {
+      "id": 3,
+      "type": "entrada",
+      "value": 35.0,
+      "reference_id": "18",
+      "date": "2025-06-04T15:41:54.614022",
+      "category": "servico"
+    },
+    {
+      "id": 4,
+      "type": "entrada",
+      "value": 35.0,
+      "reference_id": "01",
+      "date": "2025-06-04T15:41:54.616270",
+      "category": "servico"
+    },
+    {
+      "id": 5,
+      "type": "entrada",
+      "value": 75.0,
+      "reference_id": "02",
+      "date": "2025-06-04T15:44:55.667293",
+      "category": "servico"
+    },
+    {
+      "id": 6,
+      "type": "entrada",
+      "value": 126.99,
+      "reference_id": "03",
+      "date": "2025-06-04T15:49:30.027758",
+      "category": "servico"
+    },
+    {
+      "id": 7,
+      "type": "entrada",
+      "value": 2500.0,
+      "reference_id": "04",
+      "date": "2025-06-04T16:08:07.765673",
+      "category": "servico"
+    },
+    {
+      "id": 8,
+      "type": "entrada",
+      "value": 200.0,
+      "reference_id": "05",
+      "date": "2025-06-04T16:09:40.124732",
+      "category": "servico"
+    }
+  ],
+  "balance": 3356.99,
+  "last_update": "2025-06-04T15:09:03.711469"
+}

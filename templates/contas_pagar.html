@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Contas a Pagar{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2>Contas a Pagar</h2>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label for="mesFiltro">Mês:</label>
+            <select id="mesFiltro" class="form-control">
+                <!-- Preenchido via JavaScript -->
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="anoFiltro">Ano:</label>
+            <select id="anoFiltro" class="form-control">
+                <!-- Preenchido via JavaScript -->
+            </select>
+        </div>
+        <div class="col-md-6 text-right">
+            <button id="addContaBtn" class="btn btn-primary mt-4">
+                <i class="fas fa-plus"></i> Nova Conta
+            </button>
+        </div>
+    </div>
+
+    <!-- Cards de Totais -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Pendente</h5>
+                    <h3 class="card-text" id="totalPendente">R$ 0,00</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Pago</h5>
+                    <h3 class="card-text" id="totalPago">R$ 0,00</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Geral</h5>
+                    <h3 class="card-text" id="totalGeral">R$ 0,00</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela de Contas -->
+    <div class="table-responsive">
+        <table id="contasPagarTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descrição</th>
+                    <th>Fornecedor</th>
+                    <th>Valor</th>
+                    <th>Vencimento</th>
+                    <th>Categoria</th>
+                    <th>Forma Pgto</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Preenchido via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal de Conta -->
+<div class="modal fade" id="contaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Conta a Pagar</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="contaForm">
+                    <input type="hidden" id="contaId">
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <input type="text" id="contaDescricao" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fornecedor</label>
+                        <input type="text" id="contaFornecedor" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Valor</label>
+                        <input type="number" id="contaValor" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Vencimento</label>
+                        <input type="date" id="contaVencimento" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <input type="text" id="contaCategoria" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Forma de Pagamento</label>
+                        <input type="text" id="contaFormaPagamento" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Observação</label>
+                        <textarea id="contaObservacao" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="contaStatus" class="form-control">
+                            <option value="Pendente">Pendente</option>
+                            <option value="Pago">Pago</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/contas_pagar.js') }}"></script>
+{% endblock %}

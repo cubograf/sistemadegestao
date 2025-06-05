@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUBOGRAF - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>CUBOGRAF</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-section="dashboard"><a href="#"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                    <li class="nav-item" data-section="ordens"><a href="#"><i class="fas fa-list-alt"></i> <span>Ordens de Serviço</span></a></li>
+                    <li class="nav-item" data-section="producao"><a href="#"><i class="fas fa-cogs"></i> <span>Produção</span></a></li>
+                    {% if session.get('user_role') == 'admin' %}
+                    <li class="nav-item" data-section="financeiro"><a href="#"><i class="fas fa-dollar-sign"></i> <span>Financeiro</span></a></li>
+                    <li class="nav-item" data-section="compras"><a href="#"><i class="fas fa-shopping-cart"></i> <span>Compras</span></a></li>
+                    <li class="nav-item" data-section="contas_pagar"><a href="#"><i class="fas fa-file-invoice-dollar"></i> <span>Contas a Pagar</span></a></li>
+                    <li class="nav-item" data-section="balancete"><a href="#"><i class="fas fa-balance-scale"></i> <span>Balancete</span></a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="search" id="mainSearchInput" placeholder="Buscar por cliente ou número...">
+                </div>
+                <div class="admin-profile">
+                    <a href="#" id="addOrderBtnDashboard" class="add-order-btn"><i class="fas fa-plus"></i> Nova Ordem</a>
+                    <span id="usernameDisplay">{{ session.get('username', 'Usuário') }}</span>
+                    <i class="fas fa-user-circle"></i>
+                    <a href="/logout" class="logout-button" title="Sair"><i class="fas fa-sign-out-alt"></i></a>
+                </div>
+            </header>
+
+            <!-- Seção Dashboard -->
+            <section id="dashboardSection" class="dashboard-section active-section">
+                <div class="section-header">
+                    <h2>Dashboard</h2>
+                    <div class="dashboard-controls">
+                        <div class="filter-controls">
+                            <select id="dashboardMesSelect" class="form-control">
+                                <option value="1">Janeiro</option>
+                                <option value="2">Fevereiro</option>
+                                <option value="3">Março</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Maio</option>
+                                <option value="6">Junho</option>
+                                <option value="7">Julho</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
+                            </select>
+                            <select id="dashboardAnoSelect" class="form-control">
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                            <select id="dashboardStatusFilter" class="form-control">
+                                <option value="">Todos os Status</option>
+                                <option value="Aguardando Aprovação">Aguardando Aprovação</option>
+                                <option value="Aguardando Pagamento">Aguardando Pagamento</option>
+                                <option value="Em Produção">Em Produção</option>
+                                <option value="Disponível para Retirada">Disponível para Retirada</option>
+                                <option value="Finalizada">Finalizada</option>
+                                <option value="Cancelada">Cancelada</option>
+                            </select>
+                            <select id="dashboardVendedorFilter" class="form-control">
+                                <option value="">Todos os Vendedores</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-cards">
+                    <div class="card kpi-card">
+                        <h3>Ordens Pendentes</h3>
+                        <h2 id="kpiOrdensPendentes">-</h2>
+                        <p>(Aguard. Aprovação/Pagamento)</p>
+                    </div>
+                     <div class="card kpi-card">
+                        <h3>Ordens em Produção</h3>
+                        <h2 id="kpiOrdensAndamento">-</h2>
+                    </div>
+                     <div class="card kpi-card">
+                        <h3>Prontas para Retirada</h3>
+                        <h2 id="kpiOrdensRetirada">-</h2>
+                    </div>
+                    <div class="card kpi-card">
+                        <h3>Ordens Finalizadas</h3>
+                        <h2 id="kpiOrdensFinalizadas">-</h2>
+                    </div>
+                    <!-- KPIs Financeiros visíveis apenas para Admin -->
+                    {% if session.get('user_role') == 'admin' %}
+                    <div class="card kpi-card finance-kpi">
+                        <h3>Receita (Finalizadas)</h3>
+                        <h2 id="kpiReceita">R$ -</h2>
+                    </div>
+                     <div class="card kpi-card finance-kpi">
+                        <h3>Custo (Finalizadas)</h3>
+                        <h2 id="kpiCusto">R$ -</h2>
+                    </div>
+                     <div class="card kpi-card finance-kpi">
+                        <h3>Lucro Bruto (Finalizadas)</h3>
+                        <h2 id="kpiLucro">R$ -</h2>
+                    </div>
+                    <div class="card kpi-card finance-kpi">
+                        <h3>Tem Para Entrar</h3>
+                        <h2 id="kpiParaEntrar">R$ -</h2>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="charts-section">
+                    <div class="card chart-card">
+                        <h3>Vendas por Material</h3>
+                        <div class="chart-container">
+                            <canvas id="materialsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>Vendas por Vendedor</h3>
+                        <div class="chart-container">
+                            <canvas id="vendedoresChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="recent-orders card">
+                    <h3>Últimas Ordens de Serviço</h3>
+                    <table id="recentOrdersTable">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Cliente</th>
+                                <th>Vendedor</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Valor Total</th>
+                                <th>Forma Pgto</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Linhas preenchidas por JS -->
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+
+            <!-- Seção Ordens de Serviço -->
+            <section id="ordensSection" class="dashboard-section">
+                <div class="section-header">
+                     <h2>Todas as Ordens de Serviço</h2>
+                     <button id="addOrderBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Nova Ordem</button>
+                </div>
+                <div class="filters">
+                    <input type="text" id="orderSearchInput" placeholder="Buscar por cliente ou número...">
+                    <input type="text" id="vendedorFilterInput" placeholder="Filtrar por vendedor...">
+                    <select id="statusFilterSelect">
+                        <option value="">Todos os Status</option>
+                        <option value="Aguardando Aprovação">Aguardando Aprovação</option>
+                        <option value="Aguardando Pagamento">Aguardando Pagamento</option>
+                        <option value="Em Produção">Em Produção</option>
+                        <option value="Disponível para Retirada">Disponível para Retirada</option>
+                        <option value="Finalizada">Finalizada</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <table id="allOrdersTable">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Cliente</th>
+                            <th>Vendedor</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Material</th>
+                            <th>Fornecedor</th>
+                            <th>Custo</th>
+                            <th>Valor Total</th>
+                            <th>Entrada</th>
+                            <th>Restante</th>
+                            <th>Forma Pgto</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Linhas preenchidas por JS -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Seção Produção -->
+            <section id="producaoSection" class="dashboard-section">
+                <h2>Ordens em Produção</h2>
+                <div class="filters">
+                    <input type="text" id="producaoSearchInput" placeholder="Buscar por cliente ou número...">
+                </div>
+                <table id="producaoTable">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Cliente</th>
+                            <th>Vendedor</th>
+                            <th>Data</th>
+                            <th>Material</th>
+                            <th>Fornecedor</th>
+                            <th>Valor Total</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Linhas preenchidas por JS -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Seção Financeiro -->
+            <section id="financeiroSection" class="dashboard-section">
+                <h2>Financeiro</h2>
+                <div class="kpi-cards">
+                    <div class="card kpi-card finance-kpi">
+                        <h3>Receita (Finalizadas)</h3>
+                        <h2 id="financeReceita">R$ -</h2>
+                    </div>
+                    <div class="card kpi-card finance-kpi">
+                        <h3>Custo (Finalizadas)</h3>
+                        <h2 id="financeCusto">R$ -</h2>
+                    </div>
+                    <div class="card kpi-card finance-kpi">
+                        <h3>Lucro Bruto (Finalizadas)</h3>
+                        <h2 id="financeLucro">R$ -</h2>
+                    </div>
+                    <div class="card kpi-card finance-kpi">
+                        <h3>Tem Para Entrar</h3>
+                        <h2 id="financeParaEntrar">R$ -</h2>
+                    </div>
+                    <div class="card kpi-card finance-kpi">
+                        <h3>Saídas (Compras + Contas Pagas)</h3>
+                        <h2 id="financeSaidas">R$ -</h2>
+                    </div>
+                </div>
+
+                <div class="card table-section">
+                    <h3>Resumo Financeiro das Ordens</h3>
+                    <table id="financeiroTable">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Cliente</th>
+                                <th>Valor do Produto</th>
+                                <th>Custo</th>
+                                <th>Lucro</th>
+                                <th>Entrada</th>
+                                <th>Restante</th>
+                                <th>Forma Pgto</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Linhas preenchidas por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Seção Compras -->
+            <section id="comprasSection" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Compras</h2>
+                    <button id="addCompraBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Nova Compra</button>
+                </div>
+                <table id="comprasTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data</th>
+                            <th>Item</th>
+                            <th>Fornecedor</th>
+                            <th>Valor</th>
+                            <th>Observação</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Linhas preenchidas por JS -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Seção Contas a Pagar -->
+            <section id="contasPagarSection" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Contas a Pagar</h2>
+                    <button id="addContaBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Nova Conta</button>
+                </div>
+                <table id="contasPagarTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Vencimento</th>
+                            <th>Status Pgto</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Linhas preenchidas por JS -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Seção Balancete -->
+            <section id="balanceteSection" class="dashboard-section">
+                <h2>Balancete Mensal</h2>
+                <div class="filters">
+                    <select id="balanceteMesSelect">
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                    <select id="balanceteAnoSelect">
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                    <button id="atualizarBalanceteBtn" class="btn btn-primary">Atualizar</button>
+                </div>
+
+                <div class="kpi-cards">
+                    <div class="card kpi-card">
+                        <h3>Total de Entradas</h3>
+                        <h2 id="balanceteEntradas">R$ -</h2>
+                    </div>
+                    <div class="card kpi-card">
+                        <h3>Total de Saídas</h3>
+                        <h2 id="balanceteSaidas">R$ -</h2>
+                    </div>
+                    <div class="card kpi-card">
+                        <h3>Saldo</h3>
+                        <h2 id="balanceteSaldo">R$ -</h2>
+                    </div>
+                </div>
+
+                <div class="charts-section">
+                    <div class="card chart-card">
+                        <h3>Entradas vs Saídas</h3>
+                        <div class="chart-container">
+                            <canvas id="balanceteChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card table-section">
+                    <h3>Detalhamento de Entradas</h3>
+                    <table id="entradasTable">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Linhas preenchidas por JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card table-section">
+                    <h3>Detalhamento de Saídas</h3>
+                    <table id="saidasTable">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Linhas preenchidas por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Ordem -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modalTitle">Adicionar Nova Ordem</h2>
+            <form id="orderForm">
+                <input type="hidden" id="orderNumero" name="numero">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cliente">Nome do Cliente:</label>
+                        <input type="text" id="cliente" name="cliente" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="vendedor">Nome do Vendedor:</label>
+                        <input type="text" id="vendedor" name="vendedor" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="material">Material (separar múltiplos por vírgula):</label>
+                        <input type="text" id="material" name="material" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fornecedor">Fornecedor:</label>
+                        <input type="text" id="fornecedor" name="fornecedor">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="custo">Custo (R$):</label>
+                        <input type="text" id="custo" name="custo" placeholder="0,00">
+                    </div>
+                    <div class="form-group">
+                        <label for="valor_total">Valor Total (R$):</label>
+                        <input type="text" id="valor_total" name="valor_total" required placeholder="0,00">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="valor_entrada">Entrada (50% do valor):</label>
+                        <input type="text" id="valor_entrada" name="valor_entrada" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="valor_restante">Restante a Pagar:</label>
+                        <input type="text" id="valor_restante" name="valor_restante" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="forma_pagamento">Forma de Pagamento:</label>
+                        <select id="forma_pagamento" name="forma_pagamento" required>
+                            <option value="PIX">PIX</option>
+                            <option value="Crédito">Crédito</option>
+                            <option value="Débito">Débito</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="Faturado">Faturado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data:</label>
+                        <input type="date" id="data" name="data" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status" name="status" required>
+                        <option value="Aguardando Aprovação">Aguardando Aprovação</option>
+                        <option value="Aguardando Pagamento">Aguardando Pagamento</option>
+                        <option value="Em Produção">Em Produção</option>
+                        <option value="Disponível para Retirada">Disponível para Retirada</option>
+                        <option value="Finalizada">Finalizada</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="saveOrderBtn" class="btn btn-primary">Salvar</button>
+                    <button type="button" id="printOrderBtn" class="btn btn-print"><i class="fas fa-print"></i> Imprimir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar Compra -->
+    <div id="compraModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="compraModalTitle">Adicionar Nova Compra</h2>
+            <form id="compraForm">
+                <input type="hidden" id="compraId" name="id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="compraItem">Item:</label>
+                        <input type="text" id="compraItem" name="item" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="compraFornecedor">Fornecedor:</label>
+                        <input type="text" id="compraFornecedor" name="fornecedor" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="compraValor">Valor (R$):</label>
+                        <input type="number" step="0.01" id="compraValor" name="valor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="compraData">Data:</label>
+                        <input type="date" id="compraData" name="data" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="compraObservacao">Observação:</label>
+                    <textarea id="compraObservacao" name="observacao" rows="3"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="saveCompraBtn" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar Conta a Pagar -->
+    <div id="contaModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="contaModalTitle">Adicionar Nova Conta a Pagar</h2>
+            <form id="contaForm">
+                <input type="hidden" id="contaId" name="id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contaDescricao">Descrição:</label>
+                        <input type="text" id="contaDescricao" name="descricao" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contaValor">Valor (R$):</label>
+                        <input type="number" step="0.01" id="contaValor" name="valor" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contaVencimento">Vencimento:</label>
+                        <input type="date" id="contaVencimento" name="vencimento" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contaStatus">Status:</label>
+                        <select id="contaStatus" name="status" required>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Pago">Pago</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="saveContaBtn" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Variável global para o papel do usuário
+        const USER_ROLE = "{{ session.get('user_role', 'vendedor') }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/financeiro.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/materials_chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendedores_chart.js') }}"></script>
+    <script>
+        // Função para formatar valores monetários
+        function formatMoney(value) {
+            if (typeof value === 'string') {
+                value = parseMoneyToNumber(value);
+            }
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(value);
+        }
+
+        // Função para converter valor monetário em número
+        function parseMoneyToNumber(value) {
+            if (typeof value === 'number') return value;
+            if (!value) return 0;
+            return Number(value.replace(/[^0-9,-]/g, '').replace('.', '').replace(',', '.'));
+        }
+
+        // Função para obter o mês e ano atual
+        function setCurrentMonthYear() {
+            const now = new Date();
+            const currentMonth = now.getMonth() + 1;
+            const currentYear = now.getFullYear();
+
+            $('#dashboardMesSelect').val(currentMonth);
+            $('#dashboardAnoSelect').val(currentYear);
+        }
+
+        // Função para atualizar a lista de vendedores
+        function updateVendedoresList() {
+            $.get('/api/orders')
+                .done(function(orders) {
+                    const vendedores = new Set();
+                    orders.forEach(order => {
+                        if (order.vendedor) {
+                            vendedores.add(order.vendedor);
+                        }
+                    });
+
+                    const vendedorSelect = $('#dashboardVendedorFilter');
+                    vendedorSelect.find('option:not(:first)').remove();
+
+                    Array.from(vendedores).sort().forEach(vendedor => {
+                        vendedorSelect.append(`<option value="${vendedor}">${vendedor}</option>`);
+                    });
+                });
+        }
+
+        // Função para atualizar o gráfico de materiais
+        function updateMaterialsChart(orders) {
+            const materialsData = {};
+
+            orders.forEach(order => {
+                if (Array.isArray(order.material)) {
+                    order.material.forEach(material => {
+                        materialsData[material] = (materialsData[material] || 0) + 1;
+                    });
+                } else if (order.material) {
+                    const materials = order.material.split(',').map(m => m.trim());
+                    materials.forEach(material => {
+                        materialsData[material] = (materialsData[material] || 0) + 1;
+                    });
+                }
+            });
+
+            const labels = Object.keys(materialsData);
+            const data = Object.values(materialsData);
+
+            if (window.materialsChart) {
+                window.materialsChart.destroy();
+            }
+
+            const ctx = document.getElementById('materialsChart').getContext('2d');
+            window.materialsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Quantidade de Vendas',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para atualizar o gráfico de vendedores
+        function updateVendedoresChart(orders) {
+            const vendedoresData = {};
+
+            orders.forEach(order => {
+                if (order.vendedor) {
+                    vendedoresData[order.vendedor] = (vendedoresData[order.vendedor] || 0) + parseMoneyToNumber(order.valor_total);
+                }
+            });
+
+            const labels = Object.keys(vendedoresData);
+            const data = Object.values(vendedoresData);
+
+            if (window.vendedoresChart) {
+                window.vendedoresChart.destroy();
+            }
+
+            const ctx = document.getElementById('vendedoresChart').getContext('2d');
+            window.vendedoresChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total em Vendas (R$)',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatMoney(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatMoney(context.raw);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateDashboard() {
+            const mes = parseInt($('#dashboardMesSelect').val());
+            const ano = parseInt($('#dashboardAnoSelect').val());
+            const status = $('#dashboardStatusFilter').val();
+            const vendedor = $('#dashboardVendedorFilter').val();
+
+            console.log('Atualizando dashboard com:', { mes, ano, status, vendedor });
+
+            // Primeiro, buscar todas as ordens
+            $.get('/api/orders')
+                .done(function(orders) {
+                    // Filtrar as ordens
+                    const filteredOrders = orders.filter(order => {
+                        const orderDate = new Date(order.data);
+                        const orderMonth = orderDate.getMonth() + 1;
+                        const orderYear = orderDate.getFullYear();
+
+                        const matchesDate = orderMonth === mes && orderYear === ano;
+                        const matchesStatus = !status || order.status === status;
+                        const matchesVendedor = !vendedor || order.vendedor === vendedor;
+
+                        return matchesDate && matchesStatus && matchesVendedor;
+                    });
+
+                    console.log('Ordens filtradas:', filteredOrders.length);
+
+                    // Calcular estatísticas
+                    const stats = {
+                        orders_aguardando: filteredOrders.filter(o => ['Aguardando Aprovação', 'Aguardando Pagamento'].includes(o.status)).length,
+                        orders_em_producao: filteredOrders.filter(o => o.status === 'Em Produção').length,
+                        orders_retirada: filteredOrders.filter(o => o.status === 'Disponível para Retirada').length,
+                        orders_finalizados: filteredOrders.filter(o => o.status === 'Finalizada').length,
+                        receita_total: filteredOrders.filter(o => o.status === 'Finalizada').reduce((sum, o) => sum + parseMoneyToNumber(o.valor_total), 0),
+                        custos_total: filteredOrders.filter(o => o.status === 'Finalizada').reduce((sum, o) => sum + parseMoneyToNumber(o.custo), 0),
+                        valores_receber: filteredOrders.filter(o => o.status !== 'Finalizada' && o.status !== 'Cancelada').reduce((sum, o) => sum + parseMoneyToNumber(o.valor_total), 0)
+                    };
+
+                    stats.lucro_total = stats.receita_total - stats.custos_total;
+
+                    // Atualizar cards de estatísticas
+                    $('#kpiOrdensPendentes').text(stats.orders_aguardando);
+                    $('#kpiOrdensAndamento').text(stats.orders_em_producao);
+                    $('#kpiOrdensRetirada').text(stats.orders_retirada);
+                    $('#kpiOrdensFinalizadas').text(stats.orders_finalizados);
+
+                    // Atualizar cards financeiros
+                    $('#kpiReceita').text(formatMoney(stats.receita_total));
+                    $('#kpiCusto').text(formatMoney(stats.custos_total));
+                    $('#kpiLucro').text(formatMoney(stats.lucro_total));
+                    $('#kpiParaEntrar').text(formatMoney(stats.valores_receber));
+
+                    // Atualizar cards financeiros visíveis apenas para Admin
+                    if (USER_ROLE === 'admin') {
+                        $('#financeReceita').text(formatMoney(stats.receita_total));
+                        $('#financeCusto').text(formatMoney(stats.custos_total));
+                        $('#financeLucro').text(formatMoney(stats.lucro_total));
+                        $('#financeParaEntrar').text(formatMoney(stats.valores_receber));
+                    }
+
+                    // Atualizar tabela de ordens recentes
+                    const tbody = $('#recentOrdersTable tbody');
+                    tbody.empty();
+
+                    // Ordenar por data mais recente
+                    filteredOrders.sort((a, b) => new Date(b.data) - new Date(a.data));
+
+                    // Pegar as 10 ordens mais recentes
+                    const recentOrders = filteredOrders.slice(0, 10);
+
+                    recentOrders.forEach(order => {
+                        const row = `
+                            <tr>
+                                <td>${order.numero}</td>
+                                <td>${order.cliente}</td>
+                                <td>${order.vendedor}</td>
+                                <td>${new Date(order.data).toLocaleDateString('pt-BR')}</td>
+                                <td class="${order.status_class}">${order.status}</td>
+                                <td>${formatMoney(order.valor_total)}</td>
+                                <td>${order.forma_pagamento}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-edit" onclick="editOrder('${order.numero}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-print" onclick="printOrder('${order.numero}')">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+
+                    // Atualizar gráficos
+                    updateMaterialsChart(filteredOrders);
+                    updateVendedoresChart(filteredOrders);
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.error('Erro ao atualizar dashboard:', errorThrown);
+                });
+        }
+
+        // Event listeners
+        $(document).ready(function() {
+            // Inicialização
+            setCurrentMonthYear();
+            updateVendedoresList();
+            updateDashboard();
+
+            // Event listeners para os filtros
+            $('#dashboardMesSelect, #dashboardAnoSelect, #dashboardStatusFilter, #dashboardVendedorFilter').on('change', function() {
+                updateDashboard();
+            });
+
+            // Event listener para o formulário de ordem de serviço
+            $('#orderForm').on('submit', function(e) {
+                e.preventDefault();
+
+                const formData = {
+                    numero: $('#orderNumero').val(),
+                    cliente: $('#cliente').val(),
+                    vendedor: $('#vendedor').val(),
+                    material: $('#material').val().split(',').map(item => item.trim()),
+                    fornecedor: $('#fornecedor').val(),
+                    custo: parseMoneyToNumber($('#custo').val()),
+                    valor_total: parseMoneyToNumber($('#valor_total').val()),
+                    forma_pagamento: $('#forma_pagamento').val(),
+                    data: $('#data').val(),
+                    status: $('#status').val()
+                };
+
+                const url = formData.numero ? `/api/orders/${formData.numero}` : '/api/orders';
+                const method = formData.numero ? 'PUT' : 'POST';
+
+                $.ajax({
+                    url: url,
+                    method: method,
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        $('#orderModal').hide();
+                        updateDashboard();
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Erro ao salvar ordem: ' + error);
+                    }
+                });
+            });
+
+            // Event listener para o botão de nova ordem
+            $('#addOrderBtnDashboard').on('click', function(e) {
+                e.preventDefault();
+                $('#orderForm')[0].reset();
+                $('#orderNumero').val('');
+                $('#modalTitle').text('Nova Ordem de Serviço');
+                const today = new Date().toISOString().split('T')[0];
+                $('#data').val(today);
+                $('#orderModal').show();
+            });
+
+            // Event listener para fechar o modal
+            $('.close-button').on('click', function() {
+                $('#orderModal').hide();
+            });
+
+            // Event listener para cálculo automático de valores
+            $('#valor_total').on('input', function() {
+                calculateOrderValues();
+            });
+
+            // Event listener para formatação de valores monetários
+            $('#valor_total, #custo').on('blur', function() {
+                const value = parseMoneyToNumber($(this).val());
+                if (!isNaN(value)) {
+                    $(this).val(formatMoney(value));
+                }
+            });
+
+            // Event listener para fechar o modal ao clicar fora
+            $(window).on('click', function(e) {
+                if ($(e.target).hasClass('modal')) {
+                    $('.modal').hide();
+                }
+            });
+
+            // Atualizar a cada 30 segundos
+            setInterval(updateDashboard, 30000);
+        });
+    </script>
+</body>
+</html>

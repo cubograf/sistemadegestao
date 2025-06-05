@@ -1,0 +1,11 @@
+[
+  {
+    "id": "1",
+    "descricao": "Compra #2 - SULFITE",
+    "valor": 255.0,
+    "vencimento": "2025-06-04",
+    "status": "Pendente",
+    "compra_id": "2",
+    "timestamp": "2025-06-04T14:55:04.963629"
+  }
+]

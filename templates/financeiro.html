@@ -1,0 +1,141 @@
+<!-- Painel de Controle Financeiro -->
+<section id="financeiroSection" class="dashboard-section">
+    <div class="section-header">
+        <h2>Painel de Controle Financeiro</h2>
+        <div class="period-selector">
+            <button id="prevMonth" class="btn btn-secondary"><i class="fas fa-chevron-left"></i></button>
+            <span id="currentPeriod">Mês/Ano</span>
+            <button id="nextMonth" class="btn btn-secondary"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="financial-summary">
+        <div class="summary-card">
+            <h3>Receita Total</h3>
+            <p id="totalRevenue">R$ 0,00</p>
+        </div>
+        <div class="summary-card">
+            <h3>Despesas Totais</h3>
+            <p id="totalExpenses">R$ 0,00</p>
+        </div>
+        <div class="summary-card">
+            <h3>Lucro Líquido</h3>
+            <p id="netProfit">R$ 0,00</p>
+        </div>
+        <div class="summary-card">
+            <h3>Pedidos em Aberto</h3>
+            <p id="openOrders">0</p>
+        </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="charts-container">
+        <div class="chart-card">
+            <h3>Balanço Mensal</h3>
+            <canvas id="balanceChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Status dos Pedidos</h3>
+            <canvas id="ordersStatusChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Tabelas -->
+    <div class="tables-container">
+        <!-- Pedidos em Aberto -->
+        <div class="table-section">
+            <div class="table-header">
+                <h3>Pedidos em Aberto</h3>
+                <button id="transferNextMonth" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i> Transferir para Próximo Mês
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Cliente</th>
+                            <th>Valor Total</th>
+                            <th>Valor Restante</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="openOrdersTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagamentos a Receber -->
+        <div class="table-section">
+            <div class="table-header">
+                <h3>Pagamentos a Receber</h3>
+                <button id="addPaymentBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Adicionar Pagamento
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal de Pagamento -->
+<div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2 id="paymentModalTitle">Adicionar Pagamento</h2>
+        <form id="paymentForm">
+            <input type="hidden" id="paymentId" name="id">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="paymentDate">Data:</label>
+                    <input type="date" id="paymentDate" name="data" required>
+                </div>
+                <div class="form-group">
+                    <label for="paymentClient">Cliente:</label>
+                    <input type="text" id="paymentClient" name="cliente" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="paymentValue">Valor (R$):</label>
+                    <input type="number" step="0.01" id="paymentValue" name="valor" required>
+                </div>
+                <div class="form-group">
+                    <label for="paymentStatus">Status:</label>
+                    <select id="paymentStatus" name="status" required>
+                        <option value="Pendente">Pendente</option>
+                        <option value="Recebido">Recebido</option>
+                        <option value="Atrasado">Atrasado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="paymentObservation">Observações:</label>
+                <textarea id="paymentObservation" name="observacao" rows="3"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div> 
