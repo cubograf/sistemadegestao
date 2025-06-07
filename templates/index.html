@@ -823,7 +823,7 @@
                     recentOrders.forEach(order => {
                         const row = `
                             <tr>
-                                <td>${order.numero}</td>
+                                <td>${order.id}</td>
                                 <td>${order.cliente}</td>
                                 <td>${order.vendedor}</td>
                                 <td>${new Date(order.data).toLocaleDateString('pt-BR')}</td>
@@ -831,10 +831,10 @@
                                 <td>${formatMoney(order.valor_total)}</td>
                                 <td>${order.forma_pagamento}</td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-edit" onclick="editOrder('${order.numero}')">
+                                    <button type="button" class="btn btn-sm btn-edit" onclick="editOrder('${order.id}')">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-print" onclick="printOrder('${order.numero}')">
+                                    <button type="button" class="btn btn-sm btn-print" onclick="printOrder('${order.id}')">
                                         <i class="fas fa-print"></i>
                                     </button>
                                 </td>

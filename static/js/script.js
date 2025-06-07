@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // Colunas comuns
             if (!isFinanceiroTable) {
-                row.insertCell().textContent = order.numero;
+                row.insertCell().textContent = order.id;
                 row.insertCell().textContent = order.cliente || "-";
                 row.insertCell().textContent = order.vendedor || "-";
                 row.insertCell().textContent = formatDate(order.data);
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             else if (isFinanceiroTable) {
                 // Colunas específicas para financeiro
-                row.insertCell().textContent = order.numero;
+                row.insertCell().textContent = order.id;
                 row.insertCell().textContent = order.cliente || "-";
                 row.insertCell().textContent = formatCurrency(order.valor_total);
                 row.insertCell().textContent = formatCurrency(order.custo);
@@ -274,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 editButton.className = "btn-action edit-order";
                 editButton.innerHTML = '<i class="fas fa-pencil-alt"></i>';
                 editButton.title = "Editar Ordem";
-                editButton.dataset.orderNumber = order.numero;
+                editButton.dataset.orderNumber = order.id;
                 actionsCell.appendChild(editButton);
                 
                 // Botão de impressão
@@ -282,12 +282,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 printButton.className = "btn-action print-order";
                 printButton.innerHTML = '<i class="fas fa-print"></i>';
                 printButton.title = "Imprimir Ordem";
-                printButton.dataset.orderNumber = order.numero;
+                printButton.dataset.orderNumber = order.id;
                 actionsCell.appendChild(printButton);
                 
                 // Adicionar listeners
-                editButton.addEventListener("click", () => openOrderModal(order.numero));
-                printButton.addEventListener("click", () => printOrder(order.numero));
+                editButton.addEventListener("click", () => openOrderModal(order.id));
+                printButton.addEventListener("click", () => printOrder(order.id));
             }
         });
     }
@@ -428,13 +428,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const saldo = totalEntradas - totalSaidas;
         
         if (document.getElementById("balanceteEntradas"))
-            document.getElementById("balanceteEntradas").text(formatCurrency(totalEntradas));
+            document.getElementById("balanceteEntradas").textContent = formatCurrency(totalEntradas);
         
         if (document.getElementById("balanceteSaidas"))
-            document.getElementById("balanceteSaidas").text(formatCurrency(totalSaidas));
+            document.getElementById("balanceteSaidas").textContent = formatCurrency(totalSaidas);
         
         if (document.getElementById("balanceteSaldo"))
-            document.getElementById("balanceteSaldo").text(formatCurrency(saldo));
+            document.getElementById("balanceteSaldo").textContent = formatCurrency(saldo);
         
         // Atualizar gráfico do balancete
         updateBalanceteChart(totalEntradas, totalSaidas);
@@ -531,7 +531,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Calcular KPIs
         const kpis = calculateKPIs(orders);
-        updateKPIs(kpis);
+        // updateKPIs(kpis);
         
         // Renderizar tabela financeira
         renderOrdersTable(financeiroTableBody, orders);
@@ -578,7 +578,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .map(order => ({
                 data: order.data,
-                descricao: `Ordem #${order.numero} - ${order.cliente}`,
+                descricao: `Ordem #${order.id} - ${order.cliente}`,
                 valor: parseFloat(order.valor_entrada || 0)
             }));
         
@@ -619,7 +619,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return orders.filter(order => {
             // Filtro de busca
             const matchesSearch = !searchTerm || 
-                                 order.numero?.toLowerCase().includes(searchTerm) || 
+                                 order.id?.toLowerCase().includes(searchTerm) || 
                                  order.cliente?.toLowerCase().includes(searchTerm);
             
             // Filtro de vendedor
@@ -699,14 +699,14 @@ document.addEventListener("DOMContentLoaded", function () {
             modalTitle.textContent = `Editar Ordem #${orderNumber}`;
             
             // Buscar ordem pelo número
-            const order = currentOrders.find(o => o.numero === orderNumber);
+            const order = currentOrders.find(o => o.id === orderNumber);
             if (!order) {
                 alert("Ordem não encontrada!");
                 return;
             }
             
             // Preencher formulário
-            document.getElementById("orderNumero").value = order.numero;
+            document.getElementById("orderNumero").value = order.id;
             document.getElementById("cliente").value = order.cliente || "";
             document.getElementById("vendedor").value = order.vendedor || "";
             
@@ -1037,7 +1037,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let printContent = `
             <div class="print-container" style="padding: 20px; font-family: Arial, sans-serif;">
                 <h1 style="text-align: center; margin-bottom: 20px;">CUBOGRAF</h1>
-                <h2 style="text-align: center; margin-bottom: 30px;">Ordem de Serviço #${order.numero}</h2>
+                <h2 style="text-align: center; margin-bottom: 30px;">Ordem de Serviço #${order.id}</h2>
                 
                 <div style="margin-bottom: 20px;">
                     <p><strong>Cliente:</strong> ${order.cliente || "-"}</p>
@@ -1075,7 +1075,7 @@ document.addEventListener("DOMContentLoaded", function () {
         printWindow.document.write(`
             <html>
                 <head>
-                    <title>Ordem de Serviço #${order.numero} - CUBOGRAF</title>
+                    <title>Ordem de Serviço #${order.id} - CUBOGRAF</title>
                 </head>
                 <body>
                     ${printContent}

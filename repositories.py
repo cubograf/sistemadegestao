@@ -17,7 +17,7 @@ class BalanceteReposotory(RepositoryBase):
 
     def get_all(self):
         cursor = self.connection.cursor()
-        query = "SELECT id, type, value, reference_id, to_char(date, 'yyyy-mm-dd') as data, category FROM balancete;"
+        query = "SELECT id, type, value, reference_id, to_char(date, 'yyyy-mm-dd') as data, category FROM balancete ORDER BY id;"
         cursor.execute(query)
         results = cursor.fetchall()
         cursor.close()
@@ -59,7 +59,7 @@ class ComprasRepository(RepositoryBase):
 
     def get_all(self):
         cursor = self.connection.cursor()
-        query = "SELECT id, item, fornecedor, valor, to_char(data, 'yyyy-mm-dd') as data, observacao, \"timestamp\" from compras;"
+        query = "SELECT id, item, fornecedor, valor, to_char(data, 'yyyy-mm-dd') as data, observacao, \"timestamp\" from compras ORDER BY id;"
         cursor.execute(query)
         columns = self.get_columns(cursor)
         results = []
@@ -127,7 +127,7 @@ class ContasPagarRepository(RepositoryBase):
 
     def get_all(self):
         cursor = self.connection.cursor()
-        query = "SELECT  id, descricao, valor, vencimento, status, compra_id, \"timestamp\" FROM contas_pagar;"
+        query = "SELECT  id, descricao, valor, vencimento, status, compra_id, \"timestamp\" FROM contas_pagar ORDER BY id;"
         cursor.execute(query)
         columns = self.get_columns(cursor)
         results = []
@@ -196,7 +196,7 @@ class FechamentoRepository(RepositoryBase):
 
     def get_all(self):
         cursor = self.connection.cursor()
-        query = """SELECT id, mes, ano, data_fechamento, total_receitas, total_custos, ordens_transferidas, "timestamp" FROM fechamento;"""
+        query = """SELECT id, mes, ano, data_fechamento, total_receitas, total_custos, ordens_transferidas, "timestamp" FROM fechamento ORDER BY id;"""
         cursor.execute(query)
         columns = self.get_columns(cursor)
         results = []
@@ -233,7 +233,7 @@ class FinancialRepository(RepositoryBase):
 
     def get_all(self):
         cursor = self.connection.cursor()
-        query = "SELECT id, type, value, description, to_char(date, 'yyyy-mm-dd') as data, order_id FROM financial;"
+        query = "SELECT id, type, value, description, to_char(date, 'yyyy-mm-dd') as data, order_id FROM financial ORDER BY id;"
         cursor.execute(query)
         columns = self.get_columns(cursor)
         results = []
@@ -317,7 +317,8 @@ class OrdersRepository(RepositoryBase):
             , to_char(data, 'yyyy-mm-dd') as data
             , status
             , status_class 
-              FROM orders;"""
+              FROM orders
+              ORDER BY id;"""
         cursor.execute(query)
         columns = self.get_columns(cursor)
         results = []
@@ -326,7 +327,7 @@ class OrdersRepository(RepositoryBase):
         cursor.close()
         return results
 
-    def get_order_by_id(self, order_id):
+    def get_by_id(self, order_id):
         cursor = self.connection.cursor()
         query = """
         SELECT id
@@ -394,12 +395,20 @@ class OrdersRepository(RepositoryBase):
         WHERE id = %s;"""
         
         cursor.execute(query, (
-            order_data['cliente'], order_data['vendedor'], order_data['material'],
-            order_data['fornecedor'], order_data['valor_total'], order_data['custo'],
-            order_data['valor_entrada'], order_data['valor_restante'],
-            order_data['valor_estimado_lucro'], order_data['forma_pagamento'],
-            order_data['data'], order_data['status'], order_data['status_class'],
-            order_id
+              order_data.get('cliente', None)
+            , order_data.get('vendedor', None)
+            , order_data.get('material', None)
+            , order_data.get('fornecedor', None)
+            , order_data.get('valor_total', None)
+            , order_data.get('custo', None)
+            , order_data.get('valor_entrada', None)
+            , order_data.get('valor_restante', None)
+            , order_data.get('valor_estimado_lucro', None)
+            , order_data.get('forma_pagamento', None)
+            , order_data.get('data', None)
+            , order_data.get('status', None)
+            , order_data.get('status_class', None)
+            , order_id
         ))
         
         self.connection.commit()
@@ -411,7 +420,7 @@ class UsersRepository(RepositoryBase):
 
     def get_all(self):
         cursor = self.connection.cursor()
-        query = "SELECT id, username, password_hash, role FROM users;"
+        query = "SELECT id, username, password_hash, role FROM users ORDER BY id;"
         cursor.execute(query)
         columns = self.get_columns(cursor)
         results = []

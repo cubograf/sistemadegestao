@@ -280,7 +280,8 @@ def update_order(order_id):
             "valor_estimado_lucro": valor_estimado_lucro,
             "forma_pagamento": data.get("forma_pagamento", "PIX"),
             "data": data.get("data", ""),
-            "status": data.get("status",  "Aguardando Aprovação")
+            "status": data.get("status",  "Aguardando Aprovação"),
+            "status_class": f"status-{data.get('status_class', 'aguardando-aprovacao')}"
         }
 
         orders_repository.update_order(order_id, order)
@@ -905,7 +906,7 @@ def get_dashboard_stats():
         periodo = f"{ano}-{mes:02d}"
         orders_periodo = [
             order for order in orders
-            if isinstance(order, dict) and order.get("data", "").startswith(periodo)
+            if isinstance(order, dict) and str(order.get("data", "")).startswith(periodo)
         ]
 
         # Calcular estatísticas
@@ -930,7 +931,7 @@ def get_dashboard_stats():
         valores_pagar = sum(float(conta.get("valor", 0)) for conta in contas
                             if isinstance(conta, dict)
                             and conta.get("status") == "Pendente"
-                            and conta.get("vencimento", "").startswith(periodo))
+                            and str(conta.get("vencimento", "")).startswith(periodo))
 
         return jsonify({
             "total_orders": total_orders,
@@ -951,7 +952,7 @@ def get_dashboard_stats():
 
     except Exception as e:
         logger.error(f"Erro ao buscar estatísticas do dashboard: {e}")
-        return jsonify({"error": "Erro ao processar dados"}), 500
+        return jsonify({"error": f"Erro ao processar dados. {e}"}), 500
 
 @app.route("/api/encerrar_mes", methods=["POST"])
 def encerrar_mes():
