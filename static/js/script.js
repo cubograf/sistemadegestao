@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM fully loaded and parsed. Initializing dashboard...");
-    console.log("User Role:", USER_ROLE);
 
     // Elementos do DOM
     const sections = document.querySelectorAll(".dashboard-section");
@@ -422,48 +420,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function updateKPIs(kpis) {
-        if (!kpis) return;
-        
-        // KPIs do Dashboard
-        if (document.getElementById("kpiOrdensPendentes"))
-            document.getElementById("kpiOrdensPendentes").textContent = kpis.ordens_pendentes ?? "-";
-        
-        if (document.getElementById("kpiOrdensAndamento"))
-            document.getElementById("kpiOrdensAndamento").textContent = kpis.ordens_andamento ?? "-";
-        
-        if (document.getElementById("kpiOrdensRetirada"))
-            document.getElementById("kpiOrdensRetirada").textContent = kpis.ordens_retirada ?? "-";
-        
-        if (document.getElementById("kpiOrdensFinalizadas"))
-            document.getElementById("kpiOrdensFinalizadas").textContent = kpis.ordens_finalizadas ?? "-";
-        
-        // KPIs Financeiros (Dashboard e Seção Financeiro)
-        if (document.getElementById("kpiReceita"))
-            document.getElementById("kpiReceita").textContent = formatCurrency(kpis.receita);
-        if (document.getElementById("financeReceita"))
-            document.getElementById("financeReceita").textContent = formatCurrency(kpis.receita);
-        
-        if (document.getElementById("kpiCusto"))
-            document.getElementById("kpiCusto").textContent = formatCurrency(kpis.custo_total_finalizadas);
-        if (document.getElementById("financeCusto"))
-            document.getElementById("financeCusto").textContent = formatCurrency(kpis.custo_total_finalizadas);
-        
-        if (document.getElementById("kpiLucro"))
-            document.getElementById("kpiLucro").textContent = formatCurrency(kpis.lucro_bruto_finalizadas);
-        if (document.getElementById("financeLucro"))
-            document.getElementById("financeLucro").textContent = formatCurrency(kpis.lucro_bruto_finalizadas);
-        
-        if (document.getElementById("kpiParaEntrar"))
-            document.getElementById("kpiParaEntrar").textContent = formatCurrency(kpis.valor_para_entrar);
-        if (document.getElementById("financeParaEntrar"))
-            document.getElementById("financeParaEntrar").textContent = formatCurrency(kpis.valor_para_entrar);
-
-        // Novo KPI de Saídas (apenas na seção Financeiro)
-        if (document.getElementById("financeSaidas"))
-            document.getElementById("financeSaidas").textContent = formatCurrency(kpis.total_saidas);
-    }
-
     function updateBalanceteKPIs(balancete) {
         if (!balancete) return;
         
@@ -472,13 +428,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const saldo = totalEntradas - totalSaidas;
         
         if (document.getElementById("balanceteEntradas"))
-            document.getElementById("balanceteEntradas").textContent = formatCurrency(totalEntradas);
+            document.getElementById("balanceteEntradas").text(formatCurrency(totalEntradas));
         
         if (document.getElementById("balanceteSaidas"))
-            document.getElementById("balanceteSaidas").textContent = formatCurrency(totalSaidas);
+            document.getElementById("balanceteSaidas").text(formatCurrency(totalSaidas));
         
         if (document.getElementById("balanceteSaldo"))
-            document.getElementById("balanceteSaldo").textContent = formatCurrency(saldo);
+            document.getElementById("balanceteSaldo").text(formatCurrency(saldo));
         
         // Atualizar gráfico do balancete
         updateBalanceteChart(totalEntradas, totalSaidas);
@@ -486,6 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // --- Funções de Navegação ---
     function showSection(sectionId) {
+        updateDashboard();
         sections.forEach(section => {
             section.classList.remove("active-section");
         });
@@ -530,8 +487,7 @@ document.addEventListener("DOMContentLoaded", function () {
         currentOrders = orders;
         
         // Calcular KPIs
-        const kpis = calculateKPIs(orders);
-        updateKPIs(kpis);
+        calculateKPIs(orders);
         
         // Renderizar tabela de ordens recentes
         const recentOrders = [...orders].sort((a, b) => {
@@ -1143,12 +1099,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!ctx) return;
         
         // Destruir gráfico existente se houver
-        if (window.balanceteChartInstance) {
-            window.balanceteChartInstance.destroy();
+        if (window.balanceteChart) {
+            Chart.getChart("balanceteChart")?.destroy();
         }
         
         // Criar novo gráfico
-        window.balanceteChartInstance = new Chart(ctx, {
+        window.balanceteChart = new Chart(ctx, {
             type: "pie",
             data: {
                 labels: ["Entradas", "Saídas"],
@@ -1274,18 +1230,6 @@ document.addEventListener("DOMContentLoaded", function () {
         contaForm.addEventListener("submit", saveConta);
     }
 
-    // Cálculo automático de entrada e restante
-    if (valorTotalInput) {
-        valorTotalInput.addEventListener("input", function() {
-            const valorTotal = parseFloat(this.value) || 0;
-            const entrada = valorTotal * 0.5;
-            const restante = valorTotal - entrada;
-            
-            valorEntradaInput.value = entrada.toFixed(2);
-            valorRestanteInput.value = restante.toFixed(2);
-        });
-    }
-
     // Balancete
     if (atualizarBalanceteBtn) {
         atualizarBalanceteBtn.addEventListener("click", loadBalancete);
@@ -1359,8 +1303,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Atualizar dashboard a cada 30 segundos
     $(document).ready(function() {
         updateDashboard();
-        setInterval(updateDashboard, 30000);
-
-        // Resto do código existente...
+        setInterval(updateDashboard, 30000); 
     });
 });

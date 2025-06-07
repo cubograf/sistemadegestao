@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('vendedoresChart');
     if (!ctx) return;
 
+    Chart.getChart("vendedoresChart")?.destroy();
+
     // Função para carregar dados e criar o gráfico
     async function loadVendedoresChart() {
         try {

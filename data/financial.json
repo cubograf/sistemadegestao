@@ -173,8 +173,144 @@
       "description": "Ordem de Servi\u00e7o #05 - Mayara teste",
       "date": "2025-06-04T16:09:40.124250",
       "order_id": "05"
+    },
+    {
+      "id": 22,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #07 - dadas",
+      "date": "2025-06-05T16:49:32.111867",
+      "order_id": "07"
+    },
+    {
+      "id": 23,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #08 - dsada",
+      "date": "2025-06-06T00:03:53.550818",
+      "order_id": "08"
+    },
+    {
+      "id": 24,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #09 - dsada",
+      "date": "2025-06-06T00:04:07.028924",
+      "order_id": "09"
+    },
+    {
+      "id": 25,
+      "type": "entrada",
+      "value": 1111.0,
+      "description": "Ordem de Servi\u00e7o #10 - teste",
+      "date": "2025-06-06T19:54:58.354738",
+      "order_id": "10"
+    },
+    {
+      "id": 26,
+      "type": "entrada",
+      "value": 1111.0,
+      "description": "Ordem de Servi\u00e7o #10 - teste",
+      "date": "2025-06-06T19:54:58.506091",
+      "order_id": "10"
+    },
+    {
+      "id": 27,
+      "type": "entrada",
+      "value": 11111.0,
+      "description": "Ordem de Servi\u00e7o #10 - asdasd",
+      "date": "2025-06-06T19:57:06.105854",
+      "order_id": "10"
+    },
+    {
+      "id": 28,
+      "type": "entrada",
+      "value": 11111.0,
+      "description": "Ordem de Servi\u00e7o #10 - asdasd",
+      "date": "2025-06-06T19:57:06.162949",
+      "order_id": "10"
+    },
+    {
+      "id": 29,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #10 - sadasdas",
+      "date": "2025-06-06T19:59:42.693710",
+      "order_id": "10"
+    },
+    {
+      "id": 30,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #10 - dasdada",
+      "date": "2025-06-06T20:03:48.255711",
+      "order_id": "10"
+    },
+    {
+      "id": 31,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #10 - dasdada",
+      "date": "2025-06-06T20:03:48.288266",
+      "order_id": "10"
+    },
+    {
+      "id": 32,
+      "type": "entrada",
+      "value": 1111.0,
+      "description": "Ordem de Servi\u00e7o #10 - \u00daltimo Teste",
+      "date": "2025-06-06T20:07:46.546128",
+      "order_id": "10"
+    },
+    {
+      "id": 33,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #10 - dsadsad",
+      "date": "2025-06-06T20:20:21.943676",
+      "order_id": "10"
+    },
+    {
+      "id": 34,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #10 - dsadsad",
+      "date": "2025-06-06T20:20:21.957724",
+      "order_id": "10"
+    },
+    {
+      "id": 35,
+      "type": "entrada",
+      "value": 11.0,
+      "description": "Ordem de Servi\u00e7o #10 - dasda",
+      "date": "2025-06-06T20:24:17.666183",
+      "order_id": "10"
+    },
+    {
+      "id": 36,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #10 - 11111",
+      "date": "2025-06-06T20:25:35.070646",
+      "order_id": "10"
+    },
+    {
+      "id": 37,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #10 - dasds",
+      "date": "2025-06-06T20:28:14.900989",
+      "order_id": "10"
+    },
+    {
+      "id": 38,
+      "type": "entrada",
+      "value": 1.0,
+      "description": "Ordem de Servi\u00e7o #10 - dasds",
+      "date": "2025-06-06T20:28:14.997108",
+      "order_id": "10"
     }
   ],
-  "balance": 34451.98,
+  "balance": 60028.98,
   "last_update": "2025-06-04T11:59:37.230796"
 }

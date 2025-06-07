@@ -2,7 +2,6 @@
 let currentMonth = new Date().getMonth() + 1;
 let currentYear = new Date().getFullYear();
 let balanceChart = null;
-let ordersStatusChart = null;
 
 // Funções de formatação
 function formatCurrency(value) {
@@ -70,7 +69,7 @@ function updateDashboard(data) {
 function updateCharts(data) {
     try {
         // Atualizar gráfico de balanço
-        const ctx1 = document.getElementById('balanceChart').getContext('2d');
+        const ctx1 = document.getElementById('balanceteChart').getContext('2d');
         if (balanceChart) balanceChart.destroy();
         
         balanceChart = new Chart(ctx1, {
@@ -101,30 +100,6 @@ function updateCharts(data) {
             statusCount[order.status] = (statusCount[order.status] || 0) + 1;
         });
         
-        const ctx2 = document.getElementById('ordersStatusChart').getContext('2d');
-        if (ordersStatusChart) ordersStatusChart.destroy();
-        
-        ordersStatusChart = new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: Object.keys(statusCount),
-                datasets: [{
-                    data: Object.values(statusCount),
-                    backgroundColor: [
-                        '#9b59b6', // Aguardando Aprovação
-                        '#f39c12', // Aguardando Pagamento
-                        '#3498db', // Em Produção
-                        '#1abc9c', // Disponível para Retirada
-                        '#2ecc71', // Finalizada
-                        '#e74c3c'  // Cancelada
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
     } catch (error) {
         console.error('Erro ao atualizar gráficos:', error);
         showError('Erro ao atualizar gráficos');
@@ -317,8 +292,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('transferNextMonth')?.addEventListener('click', transferOrders);
     
     // Modal de pagamento
-    document.getElementById('addPaymentBtn').addEventListener('click', () => openPaymentModal());
-    document.getElementById('paymentForm').addEventListener('submit', savePayment);
+    document.getElementById('addPaymentBtn')?.addEventListener('click', () => openPaymentModal());
+    document.getElementById('paymentForm')?.addEventListener('submit', savePayment);
     
     // Fechar modal
     const closeButtons = document.querySelectorAll('.close-button');

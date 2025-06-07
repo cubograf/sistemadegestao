@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CUBOGRAF - Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -452,11 +453,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="valor_entrada">Entrada (50% do valor):</label>
-                        <input type="text" id="valor_entrada" name="valor_entrada" readonly>
+                        <input type="text" id="valor_entrada" name="valor_entrada" required placeholder="0,00">
                     </div>
                     <div class="form-group">
                         <label for="valor_restante">Restante a Pagar:</label>
-                        <input type="text" id="valor_restante" name="valor_restante" readonly>
+                        <input type="text" id="valor_restante" name="valor_restante" required placeholder="0,00">
                     </div>
                 </div>
 
@@ -585,7 +586,6 @@
     </script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/financeiro.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/materials_chart.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vendedores_chart.js') }}"></script>
     <script>
@@ -660,7 +660,7 @@
             const data = Object.values(materialsData);
 
             if (window.materialsChart) {
-                window.materialsChart.destroy();
+                Chart.getChart("materialsChart")?.destroy()
             }
 
             const ctx = document.getElementById('materialsChart').getContext('2d');
@@ -710,7 +710,7 @@
             const data = Object.values(vendedoresData);
 
             if (window.vendedoresChart) {
-                window.vendedoresChart.destroy();
+                Chart.getChart("vendedoresChart")?.destroy();
             }
 
             const ctx = document.getElementById('vendedoresChart').getContext('2d');
@@ -761,8 +761,6 @@
             const status = $('#dashboardStatusFilter').val();
             const vendedor = $('#dashboardVendedorFilter').val();
 
-            console.log('Atualizando dashboard com:', { mes, ano, status, vendedor });
-
             // Primeiro, buscar todas as ordens
             $.get('/api/orders')
                 .done(function(orders) {
@@ -778,8 +776,6 @@
 
                         return matchesDate && matchesStatus && matchesVendedor;
                     });
-
-                    console.log('Ordens filtradas:', filteredOrders.length);
 
                     // Calcular estatísticas
                     const stats = {
@@ -868,40 +864,6 @@
                 updateDashboard();
             });
 
-            // Event listener para o formulário de ordem de serviço
-            $('#orderForm').on('submit', function(e) {
-                e.preventDefault();
-
-                const formData = {
-                    numero: $('#orderNumero').val(),
-                    cliente: $('#cliente').val(),
-                    vendedor: $('#vendedor').val(),
-                    material: $('#material').val().split(',').map(item => item.trim()),
-                    fornecedor: $('#fornecedor').val(),
-                    custo: parseMoneyToNumber($('#custo').val()),
-                    valor_total: parseMoneyToNumber($('#valor_total').val()),
-                    forma_pagamento: $('#forma_pagamento').val(),
-                    data: $('#data').val(),
-                    status: $('#status').val()
-                };
-
-                const url = formData.numero ? `/api/orders/${formData.numero}` : '/api/orders';
-                const method = formData.numero ? 'PUT' : 'POST';
-
-                $.ajax({
-                    url: url,
-                    method: method,
-                    contentType: 'application/json',
-                    data: JSON.stringify(formData),
-                    success: function(response) {
-                        $('#orderModal').hide();
-                        updateDashboard();
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Erro ao salvar ordem: ' + error);
-                    }
-                });
-            });
 
             // Event listener para o botão de nova ordem
             $('#addOrderBtnDashboard').on('click', function(e) {
@@ -919,13 +881,25 @@
                 $('#orderModal').hide();
             });
 
-            // Event listener para cálculo automático de valores
-            $('#valor_total').on('input', function() {
-                calculateOrderValues();
-            });
-
             // Event listener para formatação de valores monetários
             $('#valor_total, #custo').on('blur', function() {
+                const value = parseMoneyToNumber($(this).val());
+                if (!isNaN(value)) {
+                    $(this).val(formatMoney(value));
+                }
+            });
+            
+            // Event listener para formatação de valores monetários
+            $('#valor_total, #valor_entrada').on('blur', function() {
+                const value = parseMoneyToNumber($(this).val());
+                if (!isNaN(value)) {
+                    $(this).val(formatMoney(value));
+                }
+            });
+
+            
+            // Event listener para formatação de valores monetários
+            $('#valor_total, #valor_restante').on('blur', function() {
                 const value = parseMoneyToNumber($(this).val());
                 if (!isNaN(value)) {
                     $(this).val(formatMoney(value));

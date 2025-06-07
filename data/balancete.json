@@ -63,8 +63,143 @@
       "reference_id": "05",
       "date": "2025-06-04T16:09:40.124732",
       "category": "servico"
+    },
+    {
+      "id": 9,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "06",
+      "date": "2025-06-05T16:49:32.111867",
+      "category": "servico"
+    },
+    {
+      "id": 10,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "07",
+      "date": "2025-06-05T16:49:32.113868",
+      "category": "servico"
+    },
+    {
+      "id": 11,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "08",
+      "date": "2025-06-06T00:03:53.551818",
+      "category": "servico"
+    },
+    {
+      "id": 12,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "09",
+      "date": "2025-06-06T00:04:13.998260",
+      "category": "servico"
+    },
+    {
+      "id": 13,
+      "type": "entrada",
+      "value": 1111.0,
+      "reference_id": "10",
+      "date": "2025-06-06T19:54:58.354738",
+      "category": "servico"
+    },
+    {
+      "id": 14,
+      "type": "entrada",
+      "value": 1111.0,
+      "reference_id": "10",
+      "date": "2025-06-06T19:54:58.507094",
+      "category": "servico"
+    },
+    {
+      "id": 15,
+      "type": "entrada",
+      "value": 11111.0,
+      "reference_id": "10",
+      "date": "2025-06-06T19:57:06.106861",
+      "category": "servico"
+    },
+    {
+      "id": 16,
+      "type": "entrada",
+      "value": 11111.0,
+      "reference_id": "10",
+      "date": "2025-06-06T19:57:06.163950",
+      "category": "servico"
+    },
+    {
+      "id": 17,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "10",
+      "date": "2025-06-06T19:59:42.692711",
+      "category": "servico"
+    },
+    {
+      "id": 18,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "10",
+      "date": "2025-06-06T19:59:42.697218",
+      "category": "servico"
+    },
+    {
+      "id": 19,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "10",
+      "date": "2025-06-06T20:03:48.256216",
+      "category": "servico"
+    },
+    {
+      "id": 20,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "10",
+      "date": "2025-06-06T20:03:48.289271",
+      "category": "servico"
+    },
+    {
+      "id": 21,
+      "type": "entrada",
+      "value": 1111.0,
+      "reference_id": "10",
+      "date": "2025-06-06T20:07:46.546128",
+      "category": "servico"
+    },
+    {
+      "id": 22,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "10",
+      "date": "2025-06-06T20:20:21.944678",
+      "category": "servico"
+    },
+    {
+      "id": 23,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "10",
+      "date": "2025-06-06T20:20:21.957724",
+      "category": "servico"
+    },
+    {
+      "id": 24,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "10",
+      "date": "2025-06-06T20:28:14.943034",
+      "category": "servico"
+    },
+    {
+      "id": 25,
+      "type": "entrada",
+      "value": 1.0,
+      "reference_id": "10",
+      "date": "2025-06-06T20:28:15.043162",
+      "category": "servico"
     }
   ],
-  "balance": 3356.99,
   "last_update": "2025-06-04T15:09:03.711469"
 }

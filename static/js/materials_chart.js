@@ -4,9 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('materialsChart');
     if (!ctx) return;
 
+        
+    
     // Função para carregar dados e criar o gráfico
     async function loadMaterialsChart() {
         try {
+
+            Chart.getChart("materialsChart")?.destroy()
+            
             // Buscar dados das ordens
             const response = await fetch('/api/orders');
             if (!response.ok) {

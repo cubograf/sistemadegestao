@@ -88,5 +88,77 @@
     "data": "2025-06-04",
     "status": "Finalizada",
     "status_class": "status-aguardando-aprova\u00e7\u00e3o"
+  },
+  {
+    "numero": "06",
+    "cliente": "sssssssssssssssssssssss",
+    "vendedor": "dasdas",
+    "material": [
+      "sdadsa"
+    ],
+    "fornecedor": "dsada",
+    "valor_total": 1.0,
+    "custo": 1.0,
+    "valor_entrada": 0.5,
+    "valor_restante": 0.5,
+    "valor_estimado_lucro": 0.0,
+    "forma_pagamento": "PIX",
+    "data": "2025-06-05",
+    "status": "Aguardando Aprova\u00e7\u00e3o",
+    "status_class": "status-aguardando-aprova\u00e7\u00e3o"
+  },
+  {
+    "numero": "07",
+    "cliente": "dadas",
+    "vendedor": "dasdas",
+    "material": [
+      "sdadsa"
+    ],
+    "fornecedor": "dsada",
+    "valor_total": 1.0,
+    "custo": 1.0,
+    "valor_entrada": 0.5,
+    "valor_restante": 0.5,
+    "valor_estimado_lucro": 0.0,
+    "forma_pagamento": "PIX",
+    "data": "2025-06-05",
+    "status": "Aguardando Aprova\u00e7\u00e3o",
+    "status_class": "status-aguardando-aprova\u00e7\u00e3o"
+  },
+  {
+    "numero": "08",
+    "cliente": "dsada",
+    "vendedor": "dsad",
+    "material": [
+      "dasda"
+    ],
+    "fornecedor": "dasda",
+    "valor_total": 1.0,
+    "custo": 1.0,
+    "valor_entrada": 0.5,
+    "valor_restante": 0.5,
+    "valor_estimado_lucro": 0.0,
+    "forma_pagamento": "PIX",
+    "data": "2025-06-06",
+    "status": "Aguardando Aprova\u00e7\u00e3o",
+    "status_class": "status-aguardando-aprova\u00e7\u00e3o"
+  },
+  {
+    "numero": "09",
+    "cliente": "dsada",
+    "vendedor": "dsad",
+    "material": [
+      "dasda"
+    ],
+    "fornecedor": "dasda",
+    "valor_total": 1.0,
+    "custo": 1.0,
+    "valor_entrada": 0.5,
+    "valor_restante": 0.5,
+    "valor_estimado_lucro": 0.0,
+    "forma_pagamento": "PIX",
+    "data": "2025-06-06",
+    "status": "Aguardando Aprova\u00e7\u00e3o",
+    "status_class": "status-aguardando-aprova\u00e7\u00e3o"
   }
 ]
